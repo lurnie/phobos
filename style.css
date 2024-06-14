@@ -1,0 +1,53 @@
+.input-box {
+    margin: auto;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(231, 231, 231);
+    box-shadow: 0px 0px 3px grey;
+
+    padding: 10px;
+
+    height: 40px;
+    width: 480px;
+    border-radius: 4px;
+    border: solid 2px rgb(169, 169, 169);
+
+}
+.input-box:focus-within {
+    border:solid 2px blue;
+}
+#input {
+    height: 100%;
+    width: 100%;
+
+    background-color: transparent;
+    letter-spacing: 2px;
+    border: none;
+}
+#input:focus {
+    outline: none;
+}
+#output {
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+.calculator {
+    width: 100%;
+    display: block
+}
+
+#graph {
+    margin: auto;
+
+    display: block;
+    margin-top: 25px;
+    border: solid 2px rgb(169, 169, 169);
+    box-shadow: 0px 0px 3px grey;
+
+
+    width: 500px;
+    height: 500px;
+}
