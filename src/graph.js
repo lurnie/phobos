@@ -19,8 +19,6 @@ function graph(canvas, tokens) {
 
     let screenY = 0;
 
-    console.log(calculateFromTokens(tokens, {'x': 1}))
-
     for (let screenX = -1; screenX <= canvas.width; screenX++) {
         canvas.ctx.beginPath();
         canvas.ctx.moveTo(screenX-1, screenY);

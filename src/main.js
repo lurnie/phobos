@@ -41,14 +41,14 @@ function update() {
 
     if (tokens === undefined) {output.textContent = ''; return;} // syntax error
 
+    let isGraph = tokens.length > 2  && (tokens[0] === 'y' && tokens[1] === '=');
 
-    if (tokens.length > 2 && tokens[0] === 'y' && tokens[1] === '=') {
-        // graph
+    if (isGraph) {
         graph(canvas, tokens.slice(2));
     } else {
-        // calculate
+        // normal calculator
         let result = calculateFromTokens(tokens);
-        if (isNaN(result)) {output.textContent = ''; return;} // NaN
+        if (isNaN(result)) {output.textContent = ''; return;}
         output.textContent = `= ${result}`;
     }
 }
