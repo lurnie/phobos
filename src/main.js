@@ -35,23 +35,42 @@ function tick() {
 function update() {
     let expression = input.value;
 
-    let tokens = lexer(expression);
+    let tokens;
+    try {
+        tokens = lexer(expression);
+    }
+    catch (err) {
+        if (err === 'Syntax error.' || err === 'Unexpected character.') {
+            console.log(err)
+        } else {
+            throw err;
+        }
+    }
 
     drawGrid(canvas);
 
-    if (tokens === undefined) {output.textContent = ''; return;} // syntax error
+    if (tokens === undefined || tokens.length === 0) {output.textContent = ''; return;}
 
-    let isGraph = tokens.length > 2  && (tokens[0] === 'y' && tokens[1] === '=');
-
-    if (isGraph) {
-        graph(canvas, tokens.slice(2));
-    } else {
-        // normal calculator
-        let result = calculateFromTokens(tokens);
-        if (isNaN(result)) {output.textContent = ''; return;}
-        output.textContent = `= ${result}`;
+    let isGraph = tokens.length > 2  && (tokens[0].value === 'y' && tokens[1].type === '=');
+    try {
+        if (isGraph) {
+            graph(canvas, tokens.slice(2));
+        } else {
+            // normal calculator
+            let result = calculateFromTokens(tokens);
+            if (isNaN(result)) {output.textContent = ''; return;}
+            output.textContent = `= ${result}`;
+        }
+    }
+    catch (err) {
+        if (err === 'Syntax error.' || err === 'Variable not found.' || err === 'Incorrect parenthesis.') {
+            console.log(err)
+        } else {
+            throw err;
+        }
     }
 }
+
 
 requestAnimationFrame(tick);
 
