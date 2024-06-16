@@ -1,5 +1,6 @@
 body {
     margin: 0px;
+    overflow: hidden;
 }
 
 .input-box {
@@ -60,6 +61,8 @@ body {
 .logo-bar {
     background-color:rgb(255, 205, 228);
     border-bottom: solid 2px rgb(196, 167, 167);
-    padding: 5px;
+    padding: 8px;
     box-shadow: 0px 0px 3px grey;
+    font-size: 120%;
+    width: 100%;
 }

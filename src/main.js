@@ -17,7 +17,9 @@ let canvas = {
     'ctx' : ctx,
     'width': canvasElement.width,
     'height': canvasElement.height,
-    'scale': 5 // ex: 10 means that, centered at (0, 0), the leftmost edge is -10, the right is 10, the top is 10, the bottom is -10
+    'scale': 5, // ex: 10 means that, centered at (0, 0), the leftmost edge is -10, the right is 10, the top is 10, the bottom is -10
+    'camX': 0,
+    'camY': 0
 }
 
 function zoom(event, canvas) {
@@ -27,10 +29,46 @@ function zoom(event, canvas) {
 
 canvasElement.onwheel = (event) => {zoom(event, canvas);};
 
+let mouseDown = false;
+
+document.addEventListener('mousedown', () => {
+    mouseDown = true;
+})
+
+document.addEventListener('mouseup', () => {
+    mouseDown = false;
+})
+
+
 function tick() {
     update();
     requestAnimationFrame(tick);
 }
+
+let mouse = {
+    'x': 0,
+    'y': 0
+};
+
+let mouseOver = false;
+canvasElement.addEventListener('mouseover', () => {
+    mouseOver = true;
+}),
+canvasElement.addEventListener('mouseout', () => {
+    mouseOver = false;
+})
+
+document.addEventListener('mousemove', (event) => {
+    let changeX = mouse.x - event.clientX;
+    let changeY = event.clientY - mouse.y;
+    mouse.x = event.clientX;
+    mouse.y = event.clientY;
+    const scale = 3.15; // this is an approximation of a speed that looked right, it's not exact. for some reason just 2 wouldn't work
+    if (mouseDown && mouseOver) {
+        canvas.camX += changeX/canvas.width * (canvas.scale*scale);
+        canvas.camY += changeY/canvas.height * (canvas.scale*scale);
+    }
+})
 
 function update() {
     let expression = input.value;
@@ -40,6 +78,7 @@ function update() {
         tokens = lexer(expression);
     }
     catch (err) {
+        output.textContent = ''
         if (err === 'Syntax error.' || err === 'Unexpected character.') {
             console.log(err)
         } else {
@@ -55,6 +94,7 @@ function update() {
     try {
         if (isGraph) {
             graph(canvas, tokens.slice(2));
+            output.textContent = ''
         } else {
             // normal calculator
             let result = calculateFromTokens(tokens);
@@ -63,7 +103,8 @@ function update() {
         }
     }
     catch (err) {
-        if (err === 'Syntax error.' || err === 'Variable not found.' || err === 'Incorrect parenthesis.') {
+        output.textContent = '';
+        if (err === 'Function not found.' || err === 'Variable not found.' || err === 'Incorrect parenthesis.' || err === 'Function missing input.' || err === 'Unexpected equal sign.') {
             console.log(err)
         } else {
             throw err;
@@ -73,10 +114,3 @@ function update() {
 
 
 requestAnimationFrame(tick);
-
-/*
-bugs:
-
-errors don't work properly
-
-*/

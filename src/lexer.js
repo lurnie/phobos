@@ -1,14 +1,11 @@
-function numberify(num) {
-    // used so that certain constants, like e or pi, don't turn into NaN
-    if (num === 'e' || num === 'pi' || num === 'y' || num === 'x') {return num;}
-    return Number(num);
-}
-
 function lexer(string) {
     let tokens = [];
     let currentNum = 0;
 
     function addToken(type, value=null) {
+        if (type === '=' && ((tokens.length > 0 && tokens[tokens.length-1].value !== 'y') || tokens.length === 0)) {
+            throw 'Syntax error.'
+        }
         tokens.push({
             'type': type,
             'value': value
@@ -16,7 +13,7 @@ function lexer(string) {
     }
 
     function isDigit(a) {
-        return (!isNaN(a) && (0 >= a <= 9));
+        return ((!isNaN(a) && (0 >= a <= 9) || a === '.'));
     }
     function isLetter(a) {
         let code = a.charCodeAt();
@@ -38,18 +35,21 @@ function lexer(string) {
         addToken('number', Number(num));
     }
 
-    function variable() {
+    function varOrFunc() {
         let current = string[currentNum];
-        let variableName = '';
+        let name = '';
         while (currentNum < string.length && isLetter(current) ) {
-            variableName += current;
+            name += current;
 
             currentNum++;
             current = string[currentNum];
         }
         if (currentNum < string.length) {currentNum--;}
-
-        addToken('variable', variableName);
+        let type = 'variable';
+        if (name.length > 1 && name !== 'pi') {
+            type = 'function'
+        }
+        addToken(type, name);
     }
 
     const symbols = ['^', '*', '/', '+', '-', '(', ')', '='];
@@ -57,7 +57,7 @@ function lexer(string) {
 
     while (currentNum < string.length) {
         let current = string[currentNum];
-
+        if (current === ' ') {currentNum++; continue;}
         if (symbols.includes(current)) {
             if (tokens.length > 0) {
                 let lastToken = tokens[tokens.length-1];
@@ -93,7 +93,7 @@ function lexer(string) {
                         addToken('*');
                     }
                 }
-                variable();
+                varOrFunc();
             } else {
                 throw ('Unexpected character.');
 

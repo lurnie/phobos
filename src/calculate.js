@@ -18,15 +18,33 @@ function parseAtom(tokens) {
         return left;}
     return new BinaryNode(left);
 }
-function parsePow(tokens) {
+
+function parseFunc(tokens) {
+    let symbol = tokens[0];
     let left = parseAtom(tokens);
+    if (symbol.type === 'function') {
+        if (tokens.length < 1) {
+            throw 'Function missing input.';
+        }
+    }
+    while (tokens.length > 1 && symbol.type === 'function') {
+        tokens.unshift();
+        let right = parseAtom(tokens);
+        left = new BinaryNode({'type': 'function', 'value': symbol.value }, right);
+        if (tokens[0]) {symbol = tokens[0];}
+    }
+    return left;
+}
+
+function parsePow(tokens) {
+    let left = parseFunc(tokens);
 
     let symbol;
     if (tokens[0]) {symbol = tokens[0].type};
 
     while (tokens.length > 1 && symbol === '^') {
         tokens.shift();
-        let right = parseUnary(tokens);
+        let right = parseFunc(tokens);
         left = new BinaryNode(symbol, left, right);
         if (tokens[0]) {symbol = tokens[0].type;}
     }
@@ -80,15 +98,30 @@ function evaluateTree(node, variables) {
     let token = node.value;
 
     if (node.left === null || node.right === null) {
-        if (token.type === 'variable') {
+        if (token.type === 'function') {
+            let input = evaluateTree(node.left, variables);
+            if (token.value === 'sin') {return Math.sin(input);}
+            if (token.value === 'cos') {return Math.cos(input);}
+            if (token.value === 'tan') {return Math.tan(input);}
+            if (token.value === 'floor') {return Math.floor(input);}
+            if (token.value === 'ceil') {return Math.ceil(input);}
+            if (token.value === 'round') {return Math.round(input);}
+            if (token.value === 'log') {return Math.log10(input);}
+            if (token.value === 'ln') {return Math.log(input);}
+            if (token.value === 'sqrt') {return Math.sqrt(input);}
+            if (token.value === 'cbrt') {return Math.cbrt(input);}
+            if (token.value === 'abs') {return Math.abs(input);}
+            if (token.value === 'sign') {return Math.sign(input);}
+
+            throw ('Function not found.');
+
+        } else if (token.type === 'variable') {
             if (Object.hasOwn(variables, token.value)) {return variables[token.value];}
             else {
                 throw ('Variable not found.');
             }
         } else if (token.type === 'number') {
             return token.value;
-        } else {
-            // TODO: add error?
         }
     }
 
@@ -102,15 +135,14 @@ function evaluateTree(node, variables) {
 }
 
 function calculateFromTokens(givenTokens, variables={}) {
-    let defaultVariables = {'pi': Math.PI, 'e': Math.E};
+    let defaultVariables = {'pi': Math.PI, 'e': Math.E}; // note that variables must be 1 letter, and pi is the only exception
     variables = Object.assign(variables, defaultVariables);
-
     let tokens = givenTokens.slice();
     if (tokens === undefined) {return;}
 
-
     let parsed = parseExpr(tokens);
-    return evaluateTree(parsed, variables);
+    let result = evaluateTree(parsed, variables);
+    return result;
 }
 
 function calculateFromStr(expression) {
