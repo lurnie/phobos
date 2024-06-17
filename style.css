@@ -4,7 +4,7 @@ body {
 }
 
 .input-box {
-    margin: auto;
+    margin-inline: auto;
 
     display: flex;
     justify-content: space-between;
@@ -14,8 +14,7 @@ body {
 
     padding: 10px;
 
-    height: 40px;
-    width: 480px;
+    max-width: 480px;
     border-radius: 4px;
     border: solid 2px rgb(169, 169, 169);
 
@@ -41,28 +40,26 @@ body {
 
 .calculator {
     margin-top: 25px;
-    width: 100%;
     display: block
 }
 
 #graph {
-    margin: auto;
+    margin-inline: auto;
 
     display: block;
     margin-top: 25px;
     border: solid 2px rgb(169, 169, 169);
     box-shadow: 0px 0px 3px grey;
 
-
-    width: 500px;
-    height: 500px;
+    width: 100%;
+    max-width: 500px;
 }
 
 .logo-bar {
     background-color:rgb(255, 205, 228);
     border-bottom: solid 2px rgb(196, 167, 167);
-    padding: 8px;
+    padding: min(1%, 8px);
     box-shadow: 0px 0px 3px grey;
-    font-size: 120%;
+    font-size: min(120%, 5vw);
     width: 100%;
 }
