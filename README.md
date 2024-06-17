@@ -12,7 +12,7 @@ You can use +, -, *, /, ^, along with the functions sin, cos, tan, floor, ceil, 
 Note that the trigonometric functions take radians as their input. To convert an angle in degrees to an angle in radians, multiply the degrees by pi/180.
 
 ## How it works
-The lexer goes through the text you input and finds all the tokens. Then, the tokens are put into a tree structure using a recursive parser. Lastly, the calculator goes through the tree and calculates the final result.
+The lexer goes through the input and finds all the tokens. Then, the tokens are put into a tree structure using a recursive parser. Lastly, the calculator goes through the tree and calculates the final result.
 
 ## Known bugs
 - Some equations flicker or are slightly inaccurate due to the lack of precision
