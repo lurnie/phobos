@@ -6,7 +6,7 @@ A simple calculator and graphing tool.
 ## Use
 To use the calculator, go to https://lurnie.github.io/phobos/.
 
-To calculate something, type in the box above the graph. To graph an equation, type y= into the graph.
+To calculate something, type in the box above the graph. To graph an equation, type y= into the graph. You can zoom the graph by scrolling, and you can move it around by dragging it with the mouse.
 
 You can use +, -, *, /, ^, along with the functions sin, cos, tan, floor, ceil, round, log, ln, sqrt, cbrt, abs, and sign. You can also use the constants e and pi, and the variable x if you are graphing an equation.
 
