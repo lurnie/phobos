@@ -1,8 +1,7 @@
 # Phobos
 A simple calculator and graphing tool.
 
-![screenshot](./media/screenshot.png)
-
+<img src="./media/screenshot.png" width="550" height="589"/>
 
 ## Use
 To use the calculator, go to https://lurnie.github.io/phobos/.
